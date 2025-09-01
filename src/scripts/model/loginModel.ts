@@ -1,4 +1,4 @@
-import { AuthDto } from "../dto/authDto";
+import { AuthDto } from "../dto/authDto.js";
 
 export class LoginModel {
   apiUrl = "http://localhost:2828";

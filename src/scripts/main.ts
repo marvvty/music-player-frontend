@@ -1,3 +1,5 @@
+import { LoginController } from "./controllers/loginController.js";
+
 const loginBtn = document.getElementById("login-btn");
 const registerBtn = document.getElementById("register-btn");
 
@@ -22,3 +24,4 @@ function play() {
     resume?.classList.add("fa-play");
   }
 }
+const loginController = new LoginController();

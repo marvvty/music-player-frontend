@@ -1,3 +1,4 @@
+import { LoginController } from "./controllers/loginController.js";
 const loginBtn = document.getElementById("login-btn");
 const registerBtn = document.getElementById("register-btn");
 loginBtn?.addEventListener("click", () => {
@@ -18,4 +19,5 @@ function play() {
         resume?.classList.add("fa-play");
     }
 }
+const loginController = new LoginController();
 //# sourceMappingURL=main.js.map
