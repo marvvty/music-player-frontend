@@ -21,10 +21,22 @@ export abstract class View {
   }
 
   showLoading(message: string = "Loading..."): void {
-    this.container.innerHTML = `<div class="text-gray-500">${message}</div>`;
+    this.container.textContent = "";
+
+    const div = document.createElement("div");
+    div.textContent = message;
+    div.classList.add("text-gray-500");
+
+    this.container.appendChild(div);
   }
 
   showError(message: string): void {
-    this.container.innerHTML = `<div class="text-red-400">${message}</div>`;
+    this.container.textContent = "";
+
+    const div = document.createElement("div");
+    div.textContent = message;
+    div.classList.add("text-red-400");
+
+    this.container.appendChild(div);
   }
 }

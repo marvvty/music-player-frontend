@@ -149,6 +149,7 @@ export class MusicPlayerController {
   handleQueueTrackSelect(index: number): void {
     const state = this.playerModel.getState();
     const track = state.currentQueue[index];
+
     if (track) {
       this.playerModel.setCurrentIndex(index);
       this.handleSongPlay(track);

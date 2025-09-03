@@ -43,11 +43,22 @@ export class PlaylistsView extends View {
   }
 
   showLoading(): void {
-    this.container.innerHTML =
-      '<li class="text-gray-500 text-sm">Loading playlists...</li>';
+    this.container.textContent = "";
+
+    const li = document.createElement("li");
+    li.textContent = "Loading playlists...";
+    li.classList.add("text-gray-500", "text-sm");
+
+    this.container.appendChild(li);
   }
 
   showError(message: string): void {
-    this.container.innerHTML = `<li class="text-red-400 text-sm">${message}</li>`;
+    this.container.textContent = "";
+
+    const li = document.createElement("li");
+    li.textContent = message;
+    li.classList.add("text-red-400", "text-sm");
+
+    this.container.appendChild(li);
   }
 }
