@@ -2,7 +2,7 @@ import { Song } from "../dto/musicDto.js";
 import { View } from "./abstract/abstractView.js";
 
 export class QueueView extends View {
-  private onTrackSelect: (index: number) => void;
+  onTrackSelect: (index: number) => void;
 
   constructor(container: HTMLElement, onTrackSelect: (index: number) => void) {
     super(container);
@@ -32,7 +32,7 @@ export class QueueView extends View {
     });
   }
 
-  private createQueueItem(
+  createQueueItem(
     track: Song,
     index: number,
     isCurrentTrack: boolean
@@ -58,7 +58,7 @@ export class QueueView extends View {
     return item;
   }
 
-  private formatTime(seconds: number): string {
+  formatTime(seconds: number): string {
     if (isNaN(seconds) || !isFinite(seconds)) return "0:00";
 
     const mins = Math.floor(seconds / 60);

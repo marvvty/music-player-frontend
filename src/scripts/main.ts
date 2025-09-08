@@ -1,6 +1,7 @@
 import { MusicPlayerController } from "./controllers/musicPlayer.js";
-
+import { ModalController } from "./controllers/modalController.js";
 const ff = new MusicPlayerController();
+const mm = new ModalController();
 
 const loginBtn = document.getElementById("login-btn");
 const registerBtn = document.getElementById("register-btn");

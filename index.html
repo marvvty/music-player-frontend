@@ -43,11 +43,19 @@
         </aside>
 
         <main
-          class="flex-1 p-6 overflow-y-auto border-r border-gray-700 h-full"
+          class="flex-1 p-6 overflow-y-auto border-r border-gray-700 h-full gap-2"
         >
-          <h1 id="main-title" class="text-2xl font-semibold mb-6">
-            All Tracks
-          </h1>
+          <div class="flex gap-3 justify-between">
+            <h1 id="main-title" class="text-2xl font-semibold width-200">
+              All Tracks
+            </h1>
+            <button
+              id="showModalBtn"
+              class="bg-gray-700 hover:bg-gray-800 cursor-pointer text-shadow-white rounded-3xl w-35 h-12 hover:-translate-y-1 hover:scale-100 transition"
+            >
+              Add music
+            </button>
+          </div>
           <div
             id="tracks-grid"
             class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-6 gap-1"
@@ -179,6 +187,118 @@
           />
         </div>
       </footer>
+    </div>
+
+    <div
+      id="musicModal"
+      class="fixed inset-0 bg-black/70 backdrop-blur-sm items-center justify-center z-50 transition-all duration-300 hidden"
+    >
+      <div
+        class="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-md mx-4 transform scale-95 transition-all duration-300"
+      >
+        <div
+          class="flex items-center justify-between p-6 border-b border-gray-700"
+        >
+          <h2 class="text-xl font-semibold text-white">Add Music</h2>
+          <button
+            id="closeModal"
+            class="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-800"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <form id="musicForm" class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2"
+              >Track Name</label
+            >
+            <input
+              type="text"
+              name="title"
+              required
+              placeholder="Enter track name..."
+              class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2"
+              >Artist</label
+            >
+            <input
+              type="text"
+              name="artist"
+              placeholder="Enter artist name..."
+              class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+            />
+          </div>
+          <div
+            class="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-lg"
+          >
+            <input
+              type="checkbox"
+              id="useUrl"
+              name="source_type"
+              value="URL"
+              class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+            />
+            <label for="useUrl" class="text-sm text-gray-300 cursor-pointer">
+              Add from URL instead of file
+            </label>
+          </div>
+          <div id="fileInput">
+            <label class="block text-sm font-medium text-gray-300 mb-2"
+              >Audio File</label
+            >
+            <div class="relative">
+              <input
+                type="file"
+                name="file"
+                accept="audio/*"
+                class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+              />
+            </div>
+          </div>
+          <div id="urlInput" class="hidden">
+            <label class="block text-sm font-medium text-gray-300 mb-2"
+              >Audio URL</label
+            >
+            <input
+              type="url"
+              name="url"
+              placeholder="https://example.com/track.mp3"
+              class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+            />
+          </div>
+          <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700">
+            <button
+              type="button"
+              id="cancelBtn"
+              class="px-6 py-2.5 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 hover:text-white transition-all duration-200 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              id="addMusicBtn"
+              type="submit"
+              class="px-6 py-2.5 bg-gray-700 text-white rounded-lg shadow-lg hover:bg-gray-700 hover:-translate-y-0.5 transition-all duration-200 font-medium"
+            >
+              Add Track
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <audio id="audio-player"></audio>

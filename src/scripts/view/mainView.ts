@@ -1,6 +1,6 @@
 export class MainView {
-  private titleElement: HTMLElement;
-  private allTracksBtn: HTMLButtonElement;
+  titleElement: HTMLElement;
+  allTracksBtn: HTMLButtonElement;
 
   constructor() {
     this.titleElement = document.getElementById("main-title") as HTMLElement;

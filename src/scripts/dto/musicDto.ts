@@ -31,3 +31,19 @@ export interface PlayerState {
   currentTime: number;
   duration: number;
 }
+
+export interface CreateSongDto {
+  title: string;
+  artist?: string;
+  duration?: number;
+  source_type: "UPLOAD" | "URL";
+  url: string;
+}
+
+export interface SongFormData {
+  title: string;
+  artist: string;
+  file?: File;
+  url?: string;
+  source_type: "UPLOAD" | "URL";
+}

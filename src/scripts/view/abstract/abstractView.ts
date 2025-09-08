@@ -20,7 +20,7 @@ export abstract class View {
     this.container.innerHTML = "";
   }
 
-  showLoading(message: string = "Loading..."): void {
+  showLoading(message: string): void {
     this.container.textContent = "";
 
     const div = document.createElement("div");

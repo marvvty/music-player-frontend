@@ -2,7 +2,7 @@ import { Playlist } from "../dto/musicDto";
 import { View } from "./abstract/abstractView.js";
 
 export class PlaylistsView extends View {
-  private onPlaylistSelect: (playlist: Playlist) => void;
+  onPlaylistSelect: (playlist: Playlist) => void;
 
   constructor(
     container: HTMLElement,
@@ -31,7 +31,7 @@ export class PlaylistsView extends View {
     });
   }
 
-  private createPlaylistItem(playlist: Playlist): HTMLElement {
+  createPlaylistItem(playlist: Playlist): HTMLElement {
     const item = this.createElement(
       "li",
       "p-2 border border-gray-700 rounded hover:bg-gray-700 cursor-pointer transition-colors",
