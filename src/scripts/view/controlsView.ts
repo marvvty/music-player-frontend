@@ -93,14 +93,19 @@ export class PlayerControlsView {
   }
 
   updateState(state: PlayerState): void {
-    if (state.currentTrack) {
-      this.elements.trackNameEl.textContent = state.currentTrack.title;
-      this.elements.trackArtistEl.textContent = state.currentTrack.artist;
+    const displayTrack =
+      state.currentTrack || state.currentQueue[state.currentIndex];
+
+    // Update track info
+    if (displayTrack) {
+      this.elements.trackNameEl.textContent = displayTrack.title;
+      this.elements.trackArtistEl.textContent = displayTrack.artist;
     } else {
       this.elements.trackNameEl.textContent = "No track selected";
       this.elements.trackArtistEl.textContent = "Unknown Artist";
     }
 
+    // Update play/pause button state
     if (state.isPlaying) {
       if (this.elements.playIcon) {
         this.elements.playIcon.classList.add("hidden");
@@ -117,16 +122,34 @@ export class PlayerControlsView {
       }
     }
 
+    // Enable/disable buttons based on queue state
+    const hasQueue = state.currentQueue.length > 0;
+    this.elements.playBtn.disabled = !hasQueue;
+    this.elements.prevBtn.disabled = !hasQueue;
+    this.elements.nextBtn.disabled = !hasQueue;
+    
+    // Add visual feedback for disabled buttons
+    if (hasQueue) {
+      this.elements.playBtn.classList.remove("opacity-50", "cursor-not-allowed");
+      this.elements.prevBtn.classList.remove("opacity-50", "cursor-not-allowed");
+      this.elements.nextBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    } else {
+      this.elements.playBtn.classList.add("opacity-50", "cursor-not-allowed");
+      this.elements.prevBtn.classList.add("opacity-50", "cursor-not-allowed");
+      this.elements.nextBtn.classList.add("opacity-50", "cursor-not-allowed");
+    }
+
+    // Update progress bar
     if (!this.isSeekingByUser && state.duration > 0) {
       const progress = (state.currentTime / state.duration) * 100;
       this.elements.progressBar.value = progress.toString();
     }
 
+    // Update time displays
     this.elements.currentTimeEl.textContent = this.formatTime(
       state.currentTime
     );
     this.elements.durationEl.textContent = this.formatTime(state.duration);
-
     this.elements.volumeBar.value = state.volume.toString();
   }
 

@@ -4,6 +4,7 @@ export class PlayerModel {
   private state: PlayerState;
   private audio: HTMLAudioElement;
   private observers: ((state: PlayerState) => void)[] = [];
+  private isLoadingTrack: boolean = false;
 
   constructor() {
     this.audio = new Audio();
@@ -33,7 +34,9 @@ export class PlayerModel {
     });
 
     this.audio.addEventListener("ended", () => {
+      this.state.isPlaying = false;
       this.nextTrack();
+      this.notify();
     });
 
     this.audio.addEventListener("play", () => {
@@ -49,7 +52,12 @@ export class PlayerModel {
     this.audio.addEventListener("error", (e) => {
       console.error("Audio error:", e);
       this.state.isPlaying = false;
+      this.isLoadingTrack = false;
       this.notify();
+    });
+
+    this.audio.addEventListener("canplaythrough", () => {
+      this.isLoadingTrack = false;
     });
   }
 
@@ -69,23 +77,36 @@ export class PlayerModel {
   }
 
   async loadTrack(track: Song, audioUrl: string): Promise<void> {
+    if (this.isLoadingTrack) {
+      return;
+    }
+
+    this.isLoadingTrack = true;
+    const wasPlaying = this.state.isPlaying;
+    
+    // Pause current audio and reset state
+    this.audio.pause();
+    this.state.isPlaying = false;
     this.state.currentTrack = track;
+    this.notify();
+
     this.audio.src = audioUrl;
 
     return new Promise((resolve, reject) => {
       const onCanPlay = () => {
         this.audio.removeEventListener("canplaythrough", onCanPlay);
         this.audio.removeEventListener("error", onError);
-
+        this.isLoadingTrack = false;
         this.notify();
-
         resolve();
       };
 
       const onError = (e: Event) => {
         this.audio.removeEventListener("canplaythrough", onCanPlay);
         this.audio.removeEventListener("error", onError);
-
+        this.isLoadingTrack = false;
+        this.state.currentTrack = null;
+        this.notify();
         reject(e);
       };
 
@@ -97,7 +118,23 @@ export class PlayerModel {
   }
 
   async play(): Promise<void> {
-    await this.audio.play();
+    if (this.isLoadingTrack) {
+      console.warn("Cannot play while loading track");
+      return;
+    }
+    
+    if (!this.audio.src) {
+      console.warn("No audio source loaded");
+      return;
+    }
+    
+    try {
+      await this.audio.play();
+    } catch (error) {
+      console.error("Play failed:", error);
+      this.state.isPlaying = false;
+      this.notify();
+    }
   }
 
   pause(): void {
@@ -105,10 +142,16 @@ export class PlayerModel {
   }
 
   togglePlay(): void {
+    // If no track is loaded, try to play the current queue track
+    if (!this.state.currentTrack && this.state.currentQueue.length > 0) {
+      // This will be handled by the controller
+      return;
+    }
+    
     if (this.state.isPlaying) {
       this.pause();
     } else {
-      this.play().catch(console.error);
+      this.play();
     }
   }
 
@@ -134,22 +177,19 @@ export class PlayerModel {
   }
 
   nextTrack(): void {
-    if (this.state.currentQueue.length === 0) return;
+    const len = this.state.currentQueue.length;
+    if (len === 0) return;
 
-    this.getNextIndex(1);
+    this.state.currentIndex = (this.state.currentIndex + 1) % len;
     this.notify();
   }
 
   previousTrack(): void {
-    if (this.state.currentQueue.length === 0) return;
-
-    this.getNextIndex(-1);
-    this.notify();
-  }
-
-  getNextIndex(step: number): number {
     const len = this.state.currentQueue.length;
-    return (this.state.currentIndex + step + len) % len;
+    if (len === 0) return;
+
+    this.state.currentIndex = (this.state.currentIndex - 1 + len) % len;
+    this.notify();
   }
 
   setCurrentIndex(index: number): void {
