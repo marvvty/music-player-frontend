@@ -83,8 +83,7 @@ export class PlayerModel {
 
     this.isLoadingTrack = true;
     const wasPlaying = this.state.isPlaying;
-    
-    // Pause current audio and reset state
+
     this.audio.pause();
     this.state.isPlaying = false;
     this.state.currentTrack = track;
@@ -122,12 +121,12 @@ export class PlayerModel {
       console.warn("Cannot play while loading track");
       return;
     }
-    
+
     if (!this.audio.src) {
       console.warn("No audio source loaded");
       return;
     }
-    
+
     try {
       await this.audio.play();
     } catch (error) {
@@ -142,12 +141,10 @@ export class PlayerModel {
   }
 
   togglePlay(): void {
-    // If no track is loaded, try to play the current queue track
     if (!this.state.currentTrack && this.state.currentQueue.length > 0) {
-      // This will be handled by the controller
       return;
     }
-    
+
     if (this.state.isPlaying) {
       this.pause();
     } else {

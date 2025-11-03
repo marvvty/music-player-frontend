@@ -156,7 +156,6 @@ export class MusicPlayerController {
       try {
         const audioUrl = this.trackModel.getFullAudioUrl(track.url);
         await this.playerModel.loadTrack(track, audioUrl);
-        // Auto-play the selected track
         await this.playerModel.play();
       } catch (error) {
         console.error("Failed to load selected track:", error);
@@ -166,14 +165,12 @@ export class MusicPlayerController {
 
   async handleTogglePlay(): Promise<void> {
     const state = this.playerModel.getState();
-    
-    // If no track is currently loaded but we have a queue, play the current queue track
+
     if (!state.currentTrack && state.currentQueue.length > 0) {
       await this.playCurrentQueueTrack();
       return;
     }
-    
-    // If we have a loaded track, toggle play/pause
+
     if (state.currentTrack) {
       this.playerModel.togglePlay();
     }
@@ -207,7 +204,6 @@ export class MusicPlayerController {
     this.playerControlsView.updateState(state);
     this.updateQueueView();
 
-    // Auto-load next track if current track ended and we have more tracks
     if (state.currentTime === 0 && state.duration > 0 && !state.isPlaying) {
       const currentTrack = state.currentQueue[state.currentIndex];
       if (currentTrack && !state.currentTrack) {
@@ -224,7 +220,6 @@ export class MusicPlayerController {
       try {
         const audioUrl = this.trackModel.getFullAudioUrl(track.url);
         await this.playerModel.loadTrack(track, audioUrl);
-        // Only auto-play if we're not in a paused state
         const currentState = this.playerModel.getState();
         if (!currentState.isPlaying) {
           await this.playerModel.play();
